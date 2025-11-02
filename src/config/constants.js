@@ -1,0 +1,68 @@
+// Token and Contract Configuration
+
+export const TOKEN_CONFIG = {
+  name: 'Blackcroww Token',
+  symbol: 'BCRW',
+  decimals: 18,
+  totalSupply: 800_000_000,
+  presaleAllocation: 200_000_000,
+  initialPrice: 0.25 // Price per BCRW in USDT - TBD, confirm with Saurav
+};
+
+export const CONTRACT_ADDRESSES = {
+  presale: import.meta.env.VITE_PRESALE_CONTRACT || '',
+  token: import.meta.env.VITE_TOKEN_CONTRACT || ''
+};
+
+// Presale configuration
+export const PRESALE_CONFIG = {
+  minPurchaseUSDT: 10, // Minimum purchase amount in USDT
+  maxPurchaseUSDT: 100000, // Maximum purchase amount in USDT
+  referralBonus: 0.25, // 25% referral bonus
+  buyerBonus: 0.05 // 5% bonus for first purchase
+};
+
+// Supported payment currencies
+export const PAYMENT_CURRENCIES = {
+  USDT: {
+    symbol: 'USDT',
+    name: 'Tether USD',
+    decimals: 18,
+    address: '' // To be filled
+  },
+  BNB: {
+    symbol: 'BNB',
+    name: 'Binance Coin',
+    decimals: 18,
+    address: '0x0000000000000000000000000000000000000000' // Native token
+  },
+  ETH: {
+    symbol: 'ETH',
+    name: 'Ethereum',
+    decimals: 18,
+    address: '' // To be filled
+  }
+};
+
+// Mock data for leaderboard (to be replaced with contract data)
+export const MOCK_LEADERBOARD = [
+  { rank: 1, address: '0x578e...ea4', amount: 4498617.41, tier: 'whale' },
+  { rank: 2, address: '0x2222...5c1', amount: 4377560.49, tier: 'whale' },
+  { rank: 3, address: '0x277c...6f3', amount: 3884079.28, tier: 'whale' },
+  { rank: 4, address: '0x2fd6...25c', amount: 3135925.25, tier: 'whale' },
+  { rank: 5, address: '0x1eff...baf', amount: 2533333.32, tier: 'whale' },
+  { rank: 6, address: '0xb6e4...596', amount: 2428908.92, tier: 'whale' },
+  { rank: 7, address: '0x4e5a...b57', amount: 2320645.74, tier: 'whale' },
+  { rank: 8, address: '0x8798...8ce', amount: 1858041.00, tier: 'whale' },
+  { rank: 9, address: '0x0c13...bd6', amount: 1740530.22, tier: 'whale' },
+  { rank: 10, address: '0x8406...aee', amount: 1598687.48, tier: 'whale' }
+];
+
+// Mock presale stats
+export const MOCK_PRESALE_STATS = {
+  coinsRemaining: 200_000_000,
+  totalRaised: 0,
+  currentPrice: 0.25,
+  nextPrice: 0.30,
+  soldPercentage: 0
+};

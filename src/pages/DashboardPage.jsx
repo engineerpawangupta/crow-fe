@@ -1,4 +1,4 @@
-import { useWeb3 } from '@contexts/Web3Context';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { Card } from '@components/common/Card/Card';
 import { Button } from '@components/common/Button/Button';
 import { UserBalance } from '@components/UserBalance/UserBalance';
@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { formatAddress, formatDate } from '@utils/formatters';
 
 export const DashboardPage = () => {
-  const { isConnected, walletAddress, connectWallet } = useWeb3();
+  const { isConnected, walletAddress, connectWallet } = useWeb3Wallet();
   const [showConnectModal, setShowConnectModal] = useState(!isConnected);
 
   // Mock transaction data

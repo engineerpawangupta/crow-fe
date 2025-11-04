@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Card } from '@components/common/Card/Card';
 import { Button } from '@components/common/Button/Button';
-import { useWeb3 } from '@contexts/Web3Context';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { usePresaleContract } from '../../hooks/usePresaleContract';
 import { formatNumber } from '@utils/formatters';
 import styles from './ClaimSection.module.css';
 
 export const ClaimSection = () => {
-  const { isConnected, isCorrectNetwork } = useWeb3();
+  const { isConnected, isCorrectNetwork } = useWeb3Wallet();
   const { claimTokens, loading, error } = usePresaleContract();
   const [claimSuccess, setClaimSuccess] = useState(false);
 

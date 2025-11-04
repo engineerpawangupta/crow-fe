@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useWeb3 } from '@contexts/Web3Context';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { formatAddress } from '@utils/formatters';
 import { Button } from '@components/common/Button/Button';
 import styles from './WalletConnect.module.css';
@@ -12,7 +12,7 @@ export const WalletConnect = () => {
     connectWallet, 
     disconnectWallet,
     switchNetwork 
-  } = useWeb3();
+  } = useWeb3Wallet();
   
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);

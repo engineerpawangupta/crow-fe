@@ -1,11 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { WalletConnect } from '@components/WalletConnect/WalletConnect';
-import { useWeb3 } from '@contexts/Web3Context';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import styles from './Header.module.css';
 
 export const Header = () => {
   const location = useLocation();
-  const { isConnected, isCorrectNetwork, currentNetwork } = useWeb3();
+  const { isConnected, isCorrectNetwork, currentNetwork } = useWeb3Wallet();
 
   return (
     <header className={styles.header}>

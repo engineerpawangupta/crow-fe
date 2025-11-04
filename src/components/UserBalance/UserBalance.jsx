@@ -1,10 +1,10 @@
-import { useWeb3 } from '@contexts/Web3Context';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { Card } from '@components/common/Card/Card';
 import { formatTokenAmount, formatCurrency } from '@utils/formatters';
 import styles from './UserBalance.module.css';
 
 export const UserBalance = () => {
-  const { isConnected } = useWeb3();
+  const { isConnected } = useWeb3Wallet();
 
   // Mock data - will be replaced with actual contract data
   const balanceData = {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useWeb3 } from '@contexts/Web3Context';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { Card } from '@components/common/Card/Card';
 import { Input } from '@components/common/Input/Input';
 import { Button } from '@components/common/Button/Button';
@@ -9,7 +9,7 @@ import { TOKEN_CONFIG, PAYMENT_CURRENCIES, PRESALE_CONFIG } from '@config/consta
 import styles from './PurchaseForm.module.css';
 
 export const PurchaseForm = () => {
-  const { isConnected, connectWallet } = useWeb3();
+  const { isConnected, connectWallet } = useWeb3Wallet();
   const [selectedCurrency, setSelectedCurrency] = useState('USDT');
   const [amount, setAmount] = useState('');
   const [referralCode, setReferralCode] = useState('');

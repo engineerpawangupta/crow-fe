@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
-import { Contract } from 'ethers';
-import { useWeb3 } from '@contexts/Web3Context';
+import { Contract, BrowserProvider } from 'ethers';
+import { useAccount, useWalletClient } from 'wagmi';
+import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { CONTRACT_ADDRESSES } from '@config/constants';
 import { formatTokenAmount, parseTokenAmount } from '@utils/web3';
 
@@ -16,19 +17,23 @@ const PRESALE_ABI = [
 ];
 
 export const usePresaleContract = () => {
-  const { provider, walletAddress, isConnected, isCorrectNetwork } = useWeb3();
+  const { address: walletAddress, isConnected } = useAccount();
+  const { data: walletClient } = useWalletClient();
+  const { isCorrectNetwork } = useWeb3Wallet();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Get contract instance
   const getContract = useCallback(async () => {
-    if (!provider || !CONTRACT_ADDRESSES.presale) {
-      throw new Error('Provider or contract address not available');
+    if (!walletClient || !CONTRACT_ADDRESSES.presale) {
+      throw new Error('Wallet client or contract address not available');
     }
 
+    // Convert wagmi wallet client to ethers provider and signer
+    const provider = new BrowserProvider(walletClient);
     const signer = await provider.getSigner();
     return new Contract(CONTRACT_ADDRESSES.presale, PRESALE_ABI, signer);
-  }, [provider]);
+  }, [walletClient]);
 
   // Buy tokens
   const buyTokens = useCallback(async (amount, currency = 'BNB') => {
@@ -101,7 +106,7 @@ export const usePresaleContract = () => {
 
   // Get user balance
   const getUserBalance = useCallback(async () => {
-    if (!provider || !walletAddress || !CONTRACT_ADDRESSES.presale) {
+    if (!walletClient || !walletAddress || !CONTRACT_ADDRESSES.presale) {
       return '0';
     }
 
@@ -113,11 +118,11 @@ export const usePresaleContract = () => {
       console.error('Error getting user balance:', err);
       return '0';
     }
-  }, [provider, walletAddress, getContract]);
+  }, [walletClient, walletAddress, getContract]);
 
   // Get presale info
   const getPresaleInfo = useCallback(async () => {
-    if (!provider || !CONTRACT_ADDRESSES.presale) {
+    if (!walletClient || !CONTRACT_ADDRESSES.presale) {
       return null;
     }
 
@@ -134,11 +139,11 @@ export const usePresaleContract = () => {
       console.error('Error getting presale info:', err);
       return null;
     }
-  }, [provider, getContract]);
+  }, [walletClient, getContract]);
 
   // Get remaining tokens
   const getRemainingTokens = useCallback(async () => {
-    if (!provider || !CONTRACT_ADDRESSES.presale) {
+    if (!walletClient || !CONTRACT_ADDRESSES.presale) {
       return '0';
     }
 
@@ -150,7 +155,7 @@ export const usePresaleContract = () => {
       console.error('Error getting remaining tokens:', err);
       return '0';
     }
-  }, [provider, getContract]);
+  }, [walletClient, getContract]);
 
   return {
     buyTokens,

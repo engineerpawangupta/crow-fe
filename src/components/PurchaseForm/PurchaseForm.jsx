@@ -101,8 +101,6 @@ export const PurchaseForm = () => {
   };
 
   const handleBuy = async () => {
-    debugger
-    console.log(walletAddress);
     if (!amount || parseFloat(amount) < PRESALE_CONFIG.minPurchaseUSDT) {
       setErrorMessage(`Minimum purchase is ${PRESALE_CONFIG.minPurchaseUSDT} USDT`);
       return;

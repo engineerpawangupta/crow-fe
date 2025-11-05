@@ -39,7 +39,7 @@ VITE_WALLETCONNECT_PROJECT_ID=
 
 **Important**: You need to fill in:
 1. `VITE_PRESALE_CONTRACT` - Your deployed presale contract address
-2. `VITE_TOKEN_CONTRACT` - Your BCRW token contract address
+2. `VITE_TOKEN_CONTRACT` - Your CROWW token contract address
 3. `VITE_WALLETCONNECT_PROJECT_ID` - Get free ID from https://cloud.walletconnect.com/
 
 ### Step 4: Run Development Server
@@ -202,7 +202,7 @@ Edit `src/config/constants.js`:
 ```javascript
 export const TOKEN_CONFIG = {
   name: 'Blackcroww Token',
-  symbol: 'BCRW',
+  symbol: 'CROWW',
   decimals: 18,
   totalSupply: 800_000_000,
   presaleAllocation: 200_000_000,

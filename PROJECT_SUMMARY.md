@@ -44,7 +44,7 @@ The Blackcroww ICO purchase page has been successfully implemented with all core
 - ✅ **PurchaseForm**: Token purchase interface
   - Currency tabs (USDT, BNB, ETH)
   - Amount input with MAX button
-  - Real-time BCRW calculation
+  - Real-time CROWW calculation
   - Referral key input with bonus display
   - Buy button with loading states
 - ✅ **Leaderboard**: Top 30 holders
@@ -52,7 +52,7 @@ The Blackcroww ICO purchase page has been successfully implemented with all core
   - Pagination
   - Tier badges (Whale, Shark, Fish)
 - ✅ **UserBalance**: User statistics cards
-  - Total BCRW balance
+  - Total CROWW balance
   - Coin worth at launch
   - Referral earnings
 

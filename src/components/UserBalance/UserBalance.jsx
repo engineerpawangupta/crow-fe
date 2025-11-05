@@ -27,9 +27,9 @@ export const UserBalance = () => {
     <div className={styles.userBalance}>
       <Card className={styles.balanceCard} variant="highlight">
         <div className={styles.icon}>💎</div>
-        <div className={styles.label}>Total BCRW Balance</div>
+        <div className={styles.label}>Total CROWW Balance</div>
         <div className={`${styles.value} ${styles.highlight}`}>
-          {formatTokenAmount(balanceData.totalBalance, 2, 'BCRW')}
+          {formatTokenAmount(balanceData.totalBalance, 2, 'CROWW')}
         </div>
         <div className={styles.subtitle}>Your token holdings</div>
       </Card>
@@ -47,7 +47,7 @@ export const UserBalance = () => {
         <div className={styles.icon}>🔗</div>
         <div className={styles.label}>Referral Earnings</div>
         <div className={styles.value}>
-          {formatTokenAmount(balanceData.referralEarnings, 2, 'BCRW')}
+          {formatTokenAmount(balanceData.referralEarnings, 2, 'CROWW')}
         </div>
         <div className={styles.subtitle}>From referrals</div>
       </Card>

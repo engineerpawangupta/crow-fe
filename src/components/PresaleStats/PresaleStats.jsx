@@ -29,14 +29,14 @@ export const PresaleStats = ({ onBuyClick }) => {
         <div className={styles.statCard}>
           <div className={styles.statLabel}>Current Price</div>
           <div className={`${styles.statValue} ${styles.highlight}`}>
-            ${formatNumber(stats.currentPrice, 2)}
+            ${formatNumber(stats.currentPrice, 3)}
           </div>
         </div>
 
         <div className={styles.statCard}>
           <div className={styles.statLabel}>Next Price</div>
           <div className={styles.statValue}>
-            ${formatNumber(stats.nextPrice, 2)}
+            ${formatNumber(stats.nextPrice, 3)}
           </div>
         </div>
       </div>

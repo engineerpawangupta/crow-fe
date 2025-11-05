@@ -9,7 +9,7 @@ import { TOKEN_CONFIG, PAYMENT_CURRENCIES, PRESALE_CONFIG } from '@config/consta
 import styles from './PurchaseForm.module.css';
 
 export const PurchaseForm = () => {
-  const { isConnected, connectWallet } = useWeb3Wallet();
+  const { isConnected, connectWallet, walletAddress } = useWeb3Wallet();
   const [selectedCurrency, setSelectedCurrency] = useState('USDT');
   const [amount, setAmount] = useState('');
   const [referralCode, setReferralCode] = useState('');
@@ -18,7 +18,7 @@ export const PurchaseForm = () => {
 
   const currencies = Object.keys(PAYMENT_CURRENCIES);
 
-  // Calculate BCRW tokens based on payment amount
+  // Calculate CROWW tokens based on payment amount
   const tokenAmount = amount ? calculateTokenAmount(amount, TOKEN_CONFIG.initialPrice) : 0;
 
   const handleMaxClick = () => {
@@ -27,6 +27,8 @@ export const PurchaseForm = () => {
   };
 
   const handleBuy = async () => {
+    debugger
+    console.log(walletAddress);
     if (!amount || parseFloat(amount) < PRESALE_CONFIG.minPurchaseUSDT) {
       alert(`Minimum purchase is ${PRESALE_CONFIG.minPurchaseUSDT} USDT`);
       return;
@@ -88,7 +90,7 @@ export const PurchaseForm = () => {
 
       <div className={styles.inputSection}>
         <Input
-          label={`Amount (${selectedCurrency})`}
+          label={`Amount (${selectedCurrency} - For Ethereum Blockchain)`}
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
@@ -105,9 +107,9 @@ export const PurchaseForm = () => {
       </div>
 
       <div className={styles.calculation}>
-        <div className={styles.calculationLabel}>BCRW Worth</div>
+        <div className={styles.calculationLabel}>CROWW Worth</div>
         <div className={styles.calculationValue}>
-          {formatTokenAmount(tokenAmount, 2, 'BCRW')}
+          {formatTokenAmount(tokenAmount, 2, 'CROWW')}
         </div>
       </div>
 

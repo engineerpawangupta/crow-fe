@@ -50,9 +50,9 @@ The app will open at: `http://localhost:3000`
 
 ### 1. Purchase Page (`/`)
 - **Presale Stats**: Coins remaining, current price, progress bar
-- **Purchase Form**: Buy BCRW with USDT/BNB/ETH
+- **Purchase Form**: Buy CROWW with USDT/BNB/ETH
 - **Leaderboard**: Top 30 token holders
-- **Your Balance**: Your BCRW tokens and earnings
+- **Your Balance**: Your CROWW tokens and earnings
 
 ### 2. Dashboard Page (`/dashboard`)
 - **Wallet Info**: Connected address and network
@@ -101,7 +101,7 @@ When your presale contract is deployed on BSC:
 Edit `.env`:
 ```
 VITE_PRESALE_CONTRACT=0xYourPresaleContractAddress
-VITE_TOKEN_CONTRACT=0xYourBCRWTokenAddress
+VITE_TOKEN_CONTRACT=0xYourCROWWTokenAddress
 ```
 
 ### 2. Add Contract ABI
@@ -113,7 +113,7 @@ export const PRESALE_ABI = [
 ];
 
 export const TOKEN_ABI = [
-  // Paste your BCRW token ABI array here
+  // Paste your CROWW token ABI array here
 ];
 ```
 
@@ -218,7 +218,7 @@ Deploy the `dist/` folder to your hosting (Netlify, Vercel, AWS, etc.)
 **Q: The purchase doesn't work**
 A: That's expected! Contract integration is pending. The UI and wallet connection work, but actual token purchase needs your contract address and ABI.
 
-**Q: Can I change the token name from BCRW?**
+**Q: Can I change the token name from CROWW?**
 A: Yes! Edit `src/config/constants.js` and update `TOKEN_CONFIG`.
 
 **Q: How do I switch to mainnet?**

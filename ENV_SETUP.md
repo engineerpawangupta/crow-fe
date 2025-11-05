@@ -26,7 +26,7 @@ Once your smart contracts are deployed on BSC:
 ```bash
 # Update these in .env:
 VITE_PRESALE_CONTRACT=0xYourPresaleContractAddress
-VITE_TOKEN_CONTRACT=0xYourBCRWTokenAddress
+VITE_TOKEN_CONTRACT=0xYourCROWWTokenAddress
 ```
 
 ## Environment Files
@@ -58,7 +58,7 @@ VITE_CHAIN_ID=56
 | `VITE_CHAIN_ID` | Blockchain chain ID (97 for testnet, 56 for mainnet) | ✅ |
 | `VITE_WALLETCONNECT_PROJECT_ID` | Your Reown/WalletConnect Project ID | ✅ |
 | `VITE_PRESALE_CONTRACT` | Deployed presale contract address | ⏳ (Add when deployed) |
-| `VITE_TOKEN_CONTRACT` | Deployed BCRW token address | ⏳ (Add when deployed) |
+| `VITE_TOKEN_CONTRACT` | Deployed CROWW token address | ⏳ (Add when deployed) |
 | `VITE_BSC_TESTNET_RPC` | BSC Testnet RPC endpoint | ✅ (Pre-filled) |
 | `VITE_BSC_MAINNET_RPC` | BSC Mainnet RPC endpoint | ✅ (Pre-filled) |
 

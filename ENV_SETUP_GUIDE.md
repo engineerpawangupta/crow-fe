@@ -61,7 +61,7 @@ VITE_BSC_RPC_URL=https://bsc-dataseed.binance.org/
 # Your presale contract address
 VITE_PRESALE_CONTRACT=0x1234567890abcdef...
 
-# Your BCRW token contract address
+# Your CROWW token contract address
 VITE_TOKEN_CONTRACT=0xabcdef1234567890...
 ```
 

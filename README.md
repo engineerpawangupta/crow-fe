@@ -1,6 +1,6 @@
 # Blackcroww ICO - Token Presale Platform
 
-A modern React application for the Blackcroww Token (BCRW) presale, built with Vite and Web3 integration for BSC blockchain.
+A modern React application for the Blackcroww Token (CROWW) presale, built with Vite and Web3 integration for BSC blockchain.
 
 ## Features
 
@@ -141,7 +141,7 @@ Edit `src/config/constants.js` to update token details:
 ```javascript
 export const TOKEN_CONFIG = {
   name: 'Blackcroww Token',
-  symbol: 'BCRW',
+  symbol: 'CROWW',
   decimals: 18,
   totalSupply: 800_000_000,
   presaleAllocation: 200_000_000,
@@ -193,7 +193,7 @@ export const PRESALE_ABI = [
 
 ### Dashboard Page
 - Wallet connection status
-- Total BCRW balance
+- Total CROWW balance
 - Coin worth at launch estimation
 - Referral earnings
 - Transaction history

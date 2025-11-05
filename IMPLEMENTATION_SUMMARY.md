@@ -2,7 +2,7 @@
 
 ## ✅ Project Complete
 
-A fully functional ICO presale platform has been created for the Blackcroww Token (BCRW) using React, JavaScript, and Vite with BSC blockchain integration.
+A fully functional ICO presale platform has been created for the Blackcroww Token (CROWW) using React, JavaScript, and Vite with BSC blockchain integration.
 
 ## What's Been Built
 
@@ -52,7 +52,7 @@ A fully functional ICO presale platform has been created for the Blackcroww Toke
 **PurchaseForm Component**:
 - ✅ Currency tabs (USDT, BNB, ETH)
 - ✅ Amount input with MAX button
-- ✅ Real-time BCRW calculation
+- ✅ Real-time CROWW calculation
 - ✅ Minimum purchase validation
 - ✅ Buy button with loading states
 - ✅ Referral code input (collapsible)
@@ -66,7 +66,7 @@ A fully functional ICO presale platform has been created for the Blackcroww Toke
 - ✅ Formatted addresses and amounts
 
 **UserBalance Component**:
-- ✅ Total BCRW balance card
+- ✅ Total CROWW balance card
 - ✅ Coin worth at launch card
 - ✅ Referral earnings card
 - ✅ Icon-based visual design
@@ -103,7 +103,7 @@ A fully functional ICO presale platform has been created for the Blackcroww Toke
 - ✅ Helper functions for network detection
 
 **Constants** (`src/config/constants.js`):
-- ✅ Token configuration (BCRW)
+- ✅ Token configuration (CROWW)
 - ✅ Presale settings (min/max purchase, bonuses)
 - ✅ Payment currencies (USDT, BNB, ETH)
 - ✅ Mock data for leaderboard and stats

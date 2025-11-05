@@ -54,14 +54,14 @@ export const ClaimSection = () => {
           <div className={styles.infoRow}>
             <span className={styles.label}>Available to Claim:</span>
             <span className={styles.value}>
-              {formatNumber(availableToClaim)} BCRW
+              {formatNumber(availableToClaim)} CROWW
             </span>
           </div>
 
           <div className={styles.infoRow}>
             <span className={styles.label}>Already Claimed:</span>
             <span className={styles.value}>
-              {formatNumber(totalClaimed)} BCRW
+              {formatNumber(totalClaimed)} CROWW
             </span>
           </div>
 

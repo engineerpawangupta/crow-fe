@@ -2,11 +2,11 @@
 
 export const TOKEN_CONFIG = {
   name: 'Blackcroww Token',
-  symbol: 'BCRW',
+  symbol: 'CROWW',
   decimals: 18,
   totalSupply: 800_000_000,
   presaleAllocation: 200_000_000,
-  initialPrice: 0.25 // Price per BCRW in USDT - TBD, confirm with Saurav
+  initialPrice: 0.25 // Price per CROWW in USDT - TBD, confirm with Saurav
 };
 
 export const CONTRACT_ADDRESSES = {
@@ -30,18 +30,18 @@ export const PAYMENT_CURRENCIES = {
     decimals: 18,
     address: '' // To be filled
   },
-  BNB: {
-    symbol: 'BNB',
-    name: 'Binance Coin',
-    decimals: 18,
-    address: '0x0000000000000000000000000000000000000000' // Native token
-  },
-  ETH: {
-    symbol: 'ETH',
-    name: 'Ethereum',
-    decimals: 18,
-    address: '' // To be filled
-  }
+  // BNB: {
+  //   symbol: 'BNB',
+  //   name: 'Binance Coin',
+  //   decimals: 18,
+  //   address: '0x0000000000000000000000000000000000000000' // Native token
+  // },
+  // ETH: {
+  //   symbol: 'ETH',
+  //   name: 'Ethereum',
+  //   decimals: 18,
+  //   address: '' // To be filled
+  // }
 };
 
 // Mock data for leaderboard (to be replaced with contract data)
@@ -62,7 +62,7 @@ export const MOCK_LEADERBOARD = [
 export const MOCK_PRESALE_STATS = {
   coinsRemaining: 200_000_000,
   totalRaised: 0,
-  currentPrice: 0.25,
-  nextPrice: 0.30,
+  currentPrice: 0.1,
+  nextPrice: 0.125,
   soldPercentage: 0
 };

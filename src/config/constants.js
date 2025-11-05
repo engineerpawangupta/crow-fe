@@ -29,7 +29,7 @@ export const PAYMENT_CURRENCIES = {
     symbol: 'USDT',
     name: 'Tether USD',
     decimals: 18,
-    address: '' // To be filled
+    address: import.meta.env.VITE_USDT_TOKEN_ADDRESS || ''
   },
   // BNB: {
   //   symbol: 'BNB',
@@ -66,4 +66,19 @@ export const MOCK_PRESALE_STATS = {
   currentPrice: 0.1,
   nextPrice: 0.125,
   soldPercentage: 0
+};
+
+// USDT deployment references
+export const USDT_CONFIG = {
+  symbol: 'USDT',
+  name: 'Tether USD',
+  decimals: 18, // Testnet mock uses 18 decimals (mainnet USDT uses 6)
+  mainnetAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+  sepoliaAddress: '0x31a1f621900A5bc7BEb2860bbd37773Ce426bDb3'
+};
+
+// Approval related constants
+export const APPROVAL_CONSTANTS = {
+  MAX_UINT256: '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+  USE_UNLIMITED_APPROVAL: true
 };

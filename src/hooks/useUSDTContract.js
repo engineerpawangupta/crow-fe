@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Contract, BrowserProvider, parseUnits, formatUnits } from 'ethers';
+import { Contract, BrowserProvider, JsonRpcProvider, parseUnits, formatUnits } from 'ethers';
 import { useAccount, useWalletClient } from 'wagmi';
 import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
 import { CONTRACT_ADDRESSES, USDT_CONFIG, APPROVAL_CONSTANTS } from '@config/constants';
@@ -13,6 +13,7 @@ export const useUSDTContract = () => {
   const [error, setError] = useState(null);
   const [balance, setBalance] = useState('0');
   const [allowance, setAllowance] = useState('0');
+  const currentEnv = import.meta.env.VITE_NETWORK_ENV || 'testnet';
 
   // Get USDT contract instance
   const getContract = useCallback(async (readOnly = false) => {
@@ -20,9 +21,16 @@ export const useUSDTContract = () => {
       throw new Error('USDT contract address not configured');
     }
 
-    if (readOnly && walletClient) {
-      // For read-only operations, we can use a provider without signer
-      const provider = new BrowserProvider(walletClient);
+    if (readOnly) {
+      if (walletClient) {
+        const provider = new BrowserProvider(walletClient);
+        return new Contract(CONTRACT_ADDRESSES.usdt, USDTABI, provider);
+      }
+
+      const rpcUrl = currentEnv === 'mainnet'
+        ? 'https://cloudflare-eth.com'
+        : 'https://rpc.sepolia.org';
+      const provider = new JsonRpcProvider(rpcUrl);
       return new Contract(CONTRACT_ADDRESSES.usdt, USDTABI, provider);
     }
 
@@ -30,11 +38,10 @@ export const useUSDTContract = () => {
       throw new Error('Wallet client not available');
     }
 
-    // Convert wagmi wallet client to ethers provider and signer
     const provider = new BrowserProvider(walletClient);
     const signer = await provider.getSigner();
     return new Contract(CONTRACT_ADDRESSES.usdt, USDTABI, signer);
-  }, [walletClient]);
+  }, [walletClient, currentEnv]);
 
   // Get user's USDT balance
   const getUSDTBalance = useCallback(async () => {

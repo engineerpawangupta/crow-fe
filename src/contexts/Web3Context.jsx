@@ -3,7 +3,7 @@ import { createAppKit } from '@reown/appkit/react';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
-import { bscMainnet, bscTestnet } from '@config/bscNetworks';
+import { mainnet, sepolia } from '@reown/appkit/networks';
 
 const Web3Context = createContext(null);
 
@@ -33,8 +33,8 @@ if (!projectId || projectId === 'your_project_id_here') {
 // 2. Determine current network from environment
 const currentEnv = import.meta.env.VITE_NETWORK_ENV || 'testnet';
 const networks = currentEnv === 'mainnet' 
-  ? [bscMainnet, bscTestnet] 
-  : [bscTestnet, bscMainnet];
+  ? [mainnet, sepolia] 
+  : [sepolia, mainnet];
 
 // 3. Create metadata - URL MUST match your domain & subdomain
 const metadata = {
@@ -88,6 +88,7 @@ try {
     console.log('📋 Project ID:', projectId);
     console.log('🌐 Networks:', networks.map(n => n.name).join(', '));
     console.log('🔗 Origin:', metadata.url);
+    console.log('⛓️  Primary Network:', currentEnv === 'mainnet' ? 'Ethereum Mainnet' : 'Sepolia Testnet');
   }
 } catch (error) {
   console.error('❌ AppKit initialization error:', error);

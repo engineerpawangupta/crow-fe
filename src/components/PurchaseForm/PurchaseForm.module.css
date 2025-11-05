@@ -157,6 +157,133 @@
   color: var(--color-text-muted);
 }
 
+/* New Styles for 3-Step Flow */
+.header {
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.header h3 {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text-primary);
+}
+
+.paymentMethod {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.balanceInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+}
+
+.balanceAmount {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+.priceInfo {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-sm);
+  text-align: center;
+}
+
+.errorMessage {
+  padding: var(--spacing-md);
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  border-radius: var(--radius-md);
+  color: #ff3b30;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.successMessage {
+  padding: var(--spacing-md);
+  background: rgba(52, 199, 89, 0.1);
+  border: 1px solid rgba(52, 199, 89, 0.3);
+  border-radius: var(--radius-md);
+  color: #34c759;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.txLink {
+  color: #34c759;
+  text-decoration: underline;
+  font-size: var(--font-size-xs);
+}
+
+.txLink:hover {
+  color: #30d158;
+}
+
+.approveButton {
+  margin-bottom: var(--spacing-md);
+  background: var(--color-primary-dark);
+}
+
+.approveButton:hover:not(:disabled) {
+  background: var(--color-primary);
+}
+
+.buyButton {
+  margin-bottom: var(--spacing-md);
+}
+
+.approvalIndicator {
+  text-align: center;
+  color: #34c759;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm);
+  background: rgba(52, 199, 89, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.purchaseInfo {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.infoRow span:last-child {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.maxButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.maxButton:disabled:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .purchaseForm {

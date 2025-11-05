@@ -163,3 +163,178 @@ export const calculatePaymentAmount = (tokenAmount, tokenPrice) => {
   if (!tokenAmount || !tokenPrice) return 0;
   return parseFloat(tokenAmount) * parseFloat(tokenPrice);
 };
+
+// ===== USDT Formatting Helpers =====
+
+// Format USDT amount (18 decimals for testnet, 6 for mainnet)
+// NOTE: Testnet mock USDT uses 18 decimals, different from mainnet's 6
+export const formatUSDT = (amount, decimals = 18) => {
+  if (!amount) return '0';
+  try {
+    return ethers.formatUnits(amount.toString(), decimals);
+  } catch (error) {
+    console.error('Error formatting USDT:', error);
+    return '0';
+  }
+};
+
+// Parse USDT amount (18 decimals for testnet, 6 for mainnet)
+export const parseUSDT = (amount, decimals = 18) => {
+  if (!amount) return '0';
+  try {
+    return ethers.parseUnits(amount.toString(), decimals).toString();
+  } catch (error) {
+    console.error('Error parsing USDT:', error);
+    return '0';
+  }
+};
+
+// ===== Approval Amount Helpers =====
+
+// Get max uint256 for unlimited approval
+export const getMaxApproval = () => {
+  return ethers.MaxUint256.toString();
+};
+
+// Format approval amount for display
+export const formatApprovalAmount = (amount, unlimited = false) => {
+  if (unlimited || amount === getMaxApproval()) {
+    return 'Unlimited';
+  }
+  return formatUSDT(amount);
+};
+
+// Check if amount is max approval
+export const isUnlimitedApproval = (amount) => {
+  try {
+    const maxUint = ethers.MaxUint256;
+    return BigInt(amount) >= maxUint;
+  } catch (error) {
+    return false;
+  }
+};
+
+// ===== Transaction Helpers =====
+
+// Get Etherscan/Explorer URL for transaction
+export const getExplorerUrl = (txHash, network = 'sepolia') => {
+  const baseUrls = {
+    mainnet: 'https://etherscan.io',
+    sepolia: 'https://sepolia.etherscan.io',
+    goerli: 'https://goerli.etherscan.io',
+    bsc: 'https://bscscan.com',
+    bscTestnet: 'https://testnet.bscscan.com'
+  };
+
+  const baseUrl = baseUrls[network] || baseUrls.sepolia;
+  return `${baseUrl}/tx/${txHash}`;
+};
+
+// Get address URL on explorer
+export const getAddressExplorerUrl = (address, network = 'sepolia') => {
+  const baseUrls = {
+    mainnet: 'https://etherscan.io',
+    sepolia: 'https://sepolia.etherscan.io',
+    goerli: 'https://goerli.etherscan.io',
+    bsc: 'https://bscscan.com',
+    bscTestnet: 'https://testnet.bscscan.com'
+  };
+
+  const baseUrl = baseUrls[network] || baseUrls.sepolia;
+  return `${baseUrl}/address/${address}`;
+};
+
+// Wait for transaction with timeout
+export const waitForTransactionWithTimeout = async (provider, txHash, timeoutMs = 120000) => {
+  if (!provider || !txHash) return null;
+
+  try {
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Transaction timeout')), timeoutMs)
+    );
+
+    const receiptPromise = provider.waitForTransaction(txHash);
+
+    const receipt = await Promise.race([receiptPromise, timeoutPromise]);
+    return receipt;
+  } catch (error) {
+    console.error('Error waiting for transaction:', error);
+    throw error;
+  }
+};
+
+// Parse transaction error message
+export const parseTransactionError = (error) => {
+  if (!error) return 'Unknown error occurred';
+
+  // User rejected transaction
+  if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
+    return 'Transaction rejected by user';
+  }
+
+  // Insufficient funds
+  if (error.code === 'INSUFFICIENT_FUNDS') {
+    return 'Insufficient funds for transaction';
+  }
+
+  // Network error
+  if (error.code === 'NETWORK_ERROR') {
+    return 'Network error. Please check your connection';
+  }
+
+  // Contract revert
+  if (error.message && error.message.includes('revert')) {
+    const match = error.message.match(/revert (.+?)"/);
+    if (match && match[1]) {
+      return `Transaction failed: ${match[1]}`;
+    }
+    return 'Transaction reverted by contract';
+  }
+
+  // Gas estimation error
+  if (error.message && error.message.includes('gas')) {
+    return 'Gas estimation failed. Transaction may fail.';
+  }
+
+  // Default error message
+  return error.message || 'Transaction failed';
+};
+
+// Shorten address for display
+export const shortenAddress = (address, chars = 4) => {
+  if (!address) return '';
+  return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`;
+};
+
+// Validate Ethereum address
+export const isValidAddress = (address) => {
+  try {
+    return ethers.isAddress(address);
+  } catch (error) {
+    return false;
+  }
+};
+
+// ===== Token Formatting Helpers =====
+
+// Generic format token amount
+export const formatTokenAmount = (amount, decimals = 18) => {
+  if (!amount) return '0';
+  try {
+    return ethers.formatUnits(amount.toString(), decimals);
+  } catch (error) {
+    console.error('Error formatting token amount:', error);
+    return '0';
+  }
+};
+
+// Generic parse token amount
+export const parseTokenAmount = (amount, decimals = 18) => {
+  if (!amount) return '0';
+  try {
+    return ethers.parseUnits(amount.toString(), decimals).toString();
+  } catch (error) {
+    console.error('Error parsing token amount:', error);
+    return '0';
+  }
+};

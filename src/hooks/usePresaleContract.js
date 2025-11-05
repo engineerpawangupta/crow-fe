@@ -1,20 +1,9 @@
 import { useState, useCallback } from 'react';
-import { Contract, BrowserProvider } from 'ethers';
+import { Contract, BrowserProvider, JsonRpcProvider, formatUnits, parseUnits } from 'ethers';
 import { useAccount, useWalletClient } from 'wagmi';
 import { useWeb3Wallet } from '@hooks/useWeb3Wallet';
-import { CONTRACT_ADDRESSES } from '@config/constants';
-import { formatTokenAmount, parseTokenAmount } from '@utils/web3';
-
-// TODO: Add actual contract ABI when available
-const PRESALE_ABI = [
-  // Example ABI - replace with actual contract ABI
-  'function buyTokens(uint256 amount) external payable',
-  'function claimTokens() external',
-  'function getUserBalance(address user) external view returns (uint256)',
-  'function getPresaleInfo() external view returns (uint256, uint256, uint256)',
-  'function getRemainingTokens() external view returns (uint256)',
-  'function getCurrentPrice() external view returns (uint256)'
-];
+import { CONTRACT_ADDRESSES, TOKEN_CONFIG, USDT_CONFIG } from '@config/constants';
+import { PresaleABI } from '@contracts/PresaleABI';
 
 export const usePresaleContract = () => {
   const { address: walletAddress, isConnected } = useAccount();
@@ -22,23 +11,70 @@ export const usePresaleContract = () => {
   const { isCorrectNetwork } = useWeb3Wallet();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const currentEnv = import.meta.env.VITE_NETWORK_ENV || 'testnet';
 
   // Get contract instance
-  const getContract = useCallback(async () => {
-    if (!walletClient || !CONTRACT_ADDRESSES.presale) {
-      throw new Error('Wallet client or contract address not available');
+  const getContract = useCallback(async (readOnly = false) => {
+    if (!CONTRACT_ADDRESSES.presale) {
+      throw new Error('Presale contract address not configured');
     }
 
-    // Convert wagmi wallet client to ethers provider and signer
+    if (readOnly) {
+      if (walletClient) {
+        const provider = new BrowserProvider(walletClient);
+        return new Contract(CONTRACT_ADDRESSES.presale, PresaleABI, provider);
+      }
+
+      const rpcUrl = currentEnv === 'mainnet'
+        ? 'https://cloudflare-eth.com'
+        : 'https://rpc.sepolia.org';
+      const provider = new JsonRpcProvider(rpcUrl);
+      return new Contract(CONTRACT_ADDRESSES.presale, PresaleABI, provider);
+    }
+
+    if (!walletClient) {
+      throw new Error('Wallet client not available');
+    }
+
     const provider = new BrowserProvider(walletClient);
     const signer = await provider.getSigner();
-    return new Contract(CONTRACT_ADDRESSES.presale, PRESALE_ABI, signer);
-  }, [walletClient]);
+    return new Contract(CONTRACT_ADDRESSES.presale, PresaleABI, signer);
+  }, [walletClient, currentEnv]);
 
-  // Buy tokens
-  const buyTokens = useCallback(async (amount, currency = 'BNB') => {
+  // Get USDT address from contract
+  const getUsdtAddress = useCallback(async () => {
+    try {
+      const contract = await getContract(true);
+      const usdtAddr = await contract.getUsdtAddress();
+      return usdtAddr;
+    } catch (err) {
+      console.error('Error getting USDT address:', err);
+      return CONTRACT_ADDRESSES.usdt; // Fallback to env config
+    }
+  }, [getContract]);
+
+  // Get current token price
+  const getTokenPrice = useCallback(async () => {
+    try {
+      const contract = await getContract(true);
+      const priceWei = await contract.getTokenPrice();
+      // Price is returned in USDT units (6 decimals)
+      const price = formatUnits(priceWei, USDT_CONFIG.decimals);
+      return price;
+    } catch (err) {
+      console.error('Error getting token price:', err);
+      return TOKEN_CONFIG.initialPrice.toString(); // Fallback to config
+    }
+  }, [getContract]);
+
+  // Buy presale tokens with USDT
+  const buyPresaleTokenUSDT = useCallback(async (usdtAmount) => {
     if (!isConnected || !isCorrectNetwork) {
       throw new Error('Please connect wallet and switch to correct network');
+    }
+
+    if (!usdtAmount || parseFloat(usdtAmount) <= 0) {
+      throw new Error('Invalid purchase amount');
     }
 
     setLoading(true);
@@ -47,22 +83,22 @@ export const usePresaleContract = () => {
     try {
       const contract = await getContract();
       
-      // Convert amount to wei
-      const amountInWei = formatTokenAmount(amount);
+      // Convert USDT amount to proper units (6 decimals)
+      const amountInUnits = parseUnits(usdtAmount.toString(), USDT_CONFIG.decimals);
 
-      let tx;
-      if (currency === 'BNB') {
-        // For native BNB payments
-        tx = await contract.buyTokens(amountInWei, {
-          value: amountInWei
-        });
-      } else {
-        // For ERC20 token payments (USDT, etc.)
-        // TODO: Implement token approval first
-        tx = await contract.buyTokens(amountInWei);
-      }
+      console.log('Buying tokens with USDT:', {
+        usdtAmount,
+        amountInUnits: amountInUnits.toString()
+      });
 
+      // Call buyPresaleToken function
+      const tx = await contract.buyPresaleToken(amountInUnits);
+      
+      console.log('Purchase transaction sent:', tx.hash);
+      
       const receipt = await tx.wait();
+      
+      console.log('Purchase confirmed:', receipt.hash);
       
       setLoading(false);
       return {
@@ -72,10 +108,48 @@ export const usePresaleContract = () => {
       };
     } catch (err) {
       setLoading(false);
-      setError(err.message);
+      const errorMessage = err.message || 'Transaction failed';
+      setError(errorMessage);
+      console.error('Purchase error:', err);
       throw err;
     }
   }, [isConnected, isCorrectNetwork, getContract]);
+
+  // Get total number of buyers
+  const getTotalBuyers = useCallback(async () => {
+    try {
+      const contract = await getContract(true);
+      const count = await contract.getTotalBuyers();
+      return count.toString();
+    } catch (err) {
+      console.error('Error getting total buyers:', err);
+      return '0';
+    }
+  }, [getContract]);
+
+  // Get total tokens sold
+  const getTotalTokensSold = useCallback(async () => {
+    try {
+      const contract = await getContract(true);
+      const sold = await contract.getTotalTokensSold();
+      return formatUnits(sold, TOKEN_CONFIG.decimals);
+    } catch (err) {
+      console.error('Error getting total tokens sold:', err);
+      return '0';
+    }
+  }, [getContract]);
+
+  // Get total USDT received
+  const getTotalUSDTReceived = useCallback(async () => {
+    try {
+      const contract = await getContract(true);
+      const received = await contract.getTotalUSDTReceived();
+      return formatUnits(received, USDT_CONFIG.decimals);
+    } catch (err) {
+      console.error('Error getting total USDT received:', err);
+      return '0';
+    }
+  }, [getContract]);
 
   // Claim tokens
   const claimTokens = useCallback(async () => {
@@ -104,65 +178,79 @@ export const usePresaleContract = () => {
     }
   }, [isConnected, isCorrectNetwork, getContract]);
 
-  // Get user balance
-  const getUserBalance = useCallback(async () => {
-    if (!walletClient || !walletAddress || !CONTRACT_ADDRESSES.presale) {
-      return '0';
-    }
-
-    try {
-      const contract = await getContract();
-      const balance = await contract.getUserBalance(walletAddress);
-      return parseTokenAmount(balance);
-    } catch (err) {
-      console.error('Error getting user balance:', err);
-      return '0';
-    }
-  }, [walletClient, walletAddress, getContract]);
-
-  // Get presale info
-  const getPresaleInfo = useCallback(async () => {
-    if (!walletClient || !CONTRACT_ADDRESSES.presale) {
-      return null;
-    }
-
-    try {
-      const contract = await getContract();
-      const [totalRaised, tokensSold, currentPrice] = await contract.getPresaleInfo();
-      
-      return {
-        totalRaised: parseTokenAmount(totalRaised),
-        tokensSold: parseTokenAmount(tokensSold),
-        currentPrice: parseTokenAmount(currentPrice, 6) // Assuming 6 decimals for price
-      };
-    } catch (err) {
-      console.error('Error getting presale info:', err);
-      return null;
-    }
-  }, [walletClient, getContract]);
-
   // Get remaining tokens
   const getRemainingTokens = useCallback(async () => {
-    if (!walletClient || !CONTRACT_ADDRESSES.presale) {
-      return '0';
-    }
-
     try {
-      const contract = await getContract();
+      const contract = await getContract(true);
       const remaining = await contract.getRemainingTokens();
-      return parseTokenAmount(remaining);
+      return formatUnits(remaining, TOKEN_CONFIG.decimals);
     } catch (err) {
       console.error('Error getting remaining tokens:', err);
       return '0';
     }
-  }, [walletClient, getContract]);
+  }, [getContract]);
+
+  // Get user's purchased token balance
+  const getUserBalance = useCallback(async () => {
+    if (!walletAddress || !CONTRACT_ADDRESSES.presale) {
+      return '0';
+    }
+
+    try {
+      const contract = await getContract(true);
+      const balance = await contract.getUserBalance(walletAddress);
+      return formatUnits(balance, TOKEN_CONFIG.decimals);
+    } catch (err) {
+      console.error('Error getting user balance:', err);
+      return '0';
+    }
+  }, [walletAddress, getContract]);
+
+  // Get user's purchase history
+  const fetchUserBuyDetails = useCallback(async () => {
+    if (!walletAddress) {
+      return [];
+    }
+
+    try {
+      const contract = await getContract(true);
+      const purchases = await contract.fetchUserBuyDetails(walletAddress);
+      
+      // Format purchase data
+      // Note: buyOptions is a string in the actual contract ("USDT" or "Fiat")
+      return purchases.map(purchase => ({
+        buyerAddress: purchase.buyerAddress,
+        usdtAddress: purchase.usdtAddress,
+        usdtValue: formatUnits(purchase.usdtValue, USDT_CONFIG.decimals),
+        tokenValue: formatUnits(purchase.tokenValue, TOKEN_CONFIG.decimals),
+        buyOption: purchase.buyOptions, // Already a string: "USDT" or "Fiat"
+        timestamp: Number(purchase.currentTime),
+        status: purchase.status
+      }));
+    } catch (err) {
+      console.error('Error fetching user purchase history:', err);
+      return [];
+    }
+  }, [walletAddress, getContract]);
 
   return {
-    buyTokens,
-    claimTokens,
-    getUserBalance,
-    getPresaleInfo,
+    // USDT purchase functions
+    getUsdtAddress,
+    getTokenPrice,
+    buyPresaleTokenUSDT,
+    
+    // Stats functions
+    getTotalBuyers,
+    getTotalTokensSold,
+    getTotalUSDTReceived,
     getRemainingTokens,
+    
+    // User functions
+    getUserBalance,
+    fetchUserBuyDetails,
+    claimTokens,
+    
+    // State
     loading,
     error
   };

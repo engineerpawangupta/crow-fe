@@ -104,6 +104,23 @@
   margin-top: var(--spacing-xl);
 }
 
+.loadingState {
+  padding: var(--spacing-3xl);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.errorText {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  border-radius: var(--radius-sm);
+  color: #ff3b30;
+  font-size: var(--font-size-xs);
+  text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .presaleStats {

@@ -1,6 +1,7 @@
+import { useCallback } from 'react';
 import { useAccount, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
 import { useAppKit } from '@reown/appkit/react';
-import { bscMainnet, bscTestnet } from '@config/bscNetworks';
+import { ethereumMainnet, sepoliaTestnet } from '@config/ethereumNetworks';
 import { CONTRACT_ADDRESSES } from '@config/constants';
 
 export const useWeb3Wallet = () => {
@@ -12,24 +13,34 @@ export const useWeb3Wallet = () => {
 
   // Get current network from environment
   const currentEnv = import.meta.env.VITE_NETWORK_ENV || 'testnet';
-  const expectedChainId = currentEnv === 'mainnet' ? bscMainnet.id : bscTestnet.id;
+  const expectedChainId = currentEnv === 'mainnet' ? ethereumMainnet.id : sepoliaTestnet.id;
   const isCorrectNetwork = chainId === expectedChainId;
 
-  const connectWallet = async () => {
-    await open();
-  };
+  const connectWallet = useCallback(() => {
+    try {
+      if (typeof open === 'function') {
+        void open();
+      }
+    } catch (error) {
+      console.error('Error opening wallet modal:', error);
+    }
+  }, [open]);
 
-  const disconnectWallet = async () => {
-    await disconnect();
-  };
+  const disconnectWallet = useCallback(async () => {
+    try {
+      await disconnect();
+    } catch (error) {
+      console.error('Error disconnecting wallet:', error);
+    }
+  }, [disconnect]);
 
-  const switchNetwork = async () => {
+  const switchNetwork = useCallback(async () => {
     try {
       await switchChain({ chainId: expectedChainId });
     } catch (error) {
       console.error('Error switching network:', error);
     }
-  };
+  }, [switchChain, expectedChainId]);
 
   return {
     address,
@@ -42,7 +53,7 @@ export const useWeb3Wallet = () => {
     switchNetwork,
     currentNetwork: {
       chainId: expectedChainId,
-      name: currentEnv === 'mainnet' ? 'BSC Mainnet' : 'BSC Testnet'
+      name: currentEnv === 'mainnet' ? 'Ethereum Mainnet' : 'Sepolia Testnet'
     },
     contractAddresses: CONTRACT_ADDRESSES
   };

@@ -4,14 +4,15 @@ export const TOKEN_CONFIG = {
   name: 'Blackcroww Token',
   symbol: 'CROWW',
   decimals: 18,
-  totalSupply: 800_000_000,
-  presaleAllocation: 200_000_000,
+  totalSupply: 800000000,
+  presaleAllocation: 200000000,
   initialPrice: 0.25 // Price per CROWW in USDT - TBD, confirm with Saurav
 };
 
 export const CONTRACT_ADDRESSES = {
-  presale: import.meta.env.VITE_PRESALE_CONTRACT || '',
-  token: import.meta.env.VITE_TOKEN_CONTRACT || ''
+  presale: import.meta.env.VITE_PRESALE_CONTRACT_ADDRESS || '',
+  token: import.meta.env.VITE_TOKEN_CONTRACT || '',
+  usdt: import.meta.env.VITE_USDT_TOKEN_ADDRESS || ''
 };
 
 // Presale configuration
@@ -60,7 +61,7 @@ export const MOCK_LEADERBOARD = [
 
 // Mock presale stats
 export const MOCK_PRESALE_STATS = {
-  coinsRemaining: 200_000_000,
+  coinsRemaining: 200000000,
   totalRaised: 0,
   currentPrice: 0.1,
   nextPrice: 0.125,
